@@ -1,9 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-const isDevBranch = typeof __GIT_BRANCH__ !== 'undefined' && __GIT_BRANCH__ === 'dev'
 const isProd = import.meta.env.PROD
-const isProdMode = import.meta.env.VITE_PROD === '1'
 const appVersion = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.0'
 const buildDate = typeof __APP_BUILD_DATE__ !== 'undefined' ? __APP_BUILD_DATE__ : ''
 
@@ -53,10 +51,10 @@ onMounted(() => {
     <!-- ===== Navbar ===== -->
     <nav class="navbar navbar-expand-lg navbar-earth sticky-top">
       <div class="container">
-        <router-link class="navbar-brand d-flex align-items-center" :class="{ 'is-prod': isProdMode }" to="/">
+        <router-link class="navbar-brand d-flex align-items-center" :class="{ 'is-prod': isProd }" to="/">
           <img src="/earth.png" alt="Logo" style="width: 28px; height: 28px; object-fit: contain; mix-blend-mode: screen; border-radius: 50%;" class="me-2"> 
           Earth Numerator
-          <span v-if="isProdMode" class="live-chip">LIVE</span>
+          <span v-if="isProd" class="live-chip">LIVE</span>
         </router-link>
 
         <button
