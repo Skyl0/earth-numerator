@@ -24,32 +24,6 @@
           </div>
         </router-link>
       </div>
-
-      <div class="col-sm-6 col-lg-4">
-        <router-link to="/resource" class="feature-card">
-          <div class="feature-icon text-earth-amber">
-            <i class="bi bi-boxes"></i>
-          </div>
-          <div class="feature-title">Resource Calculator</div>
-          <div class="feature-desc">
-            Plan your production output and estimate resource income
-            per hour based on your current infrastructure.
-          </div>
-        </router-link>
-      </div>
-
-      <div class="col-sm-6 col-lg-4">
-        <router-link to="/troops" class="feature-card">
-          <div class="feature-icon text-earth-blue">
-            <i class="bi bi-person-arms-up"></i>
-          </div>
-          <div class="feature-title">Troop Stats</div>
-          <div class="feature-desc">
-            Look up individual unit stats, costs and ratios to plan
-            your armies with precision.
-          </div>
-        </router-link>
-      </div>
     </div>
 
     <!-- Info banner -->

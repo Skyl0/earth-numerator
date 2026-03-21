@@ -343,20 +343,6 @@
       </div>
     </div>
 
-    <!-- Notes -->
-    <div class="card-earth mt-4 p-4">
-      <h2 class="text-earth-blue mb-3" style="font-size:1rem; font-weight:700;">
-        <i class="bi bi-journal-text me-2"></i>Formula Notes
-      </h2>
-      <p style="color:var(--earth-muted); font-size:.875rem; margin-bottom:0;">
-        The actual formula will be implemented once the game mechanics are confirmed.
-        Currently the calculator uses a <em>placeholder</em> calculation:<br/>
-        <code style="color:var(--earth-teal);">Attack = Defense &times; allyFactor &times; dictFactor &times; (defenderWeaponTech / 100) &divide; (weaponTech / 100) &divide; plannedStrikeMult &divide; (readiness / 100)</code>.
-        Both tech values are <strong style="color:var(--earth-teal);">normalised</strong> at 100&nbsp;=&nbsp;baseline. Defender tech above 100 counters your attack;
-        your weapon tech above 100 reduces the troops required. Dictatorship adds <strong style="color:var(--earth-red);">25%</strong> defense. Planned Strike &times;1.5. Readiness below 100% increases the raw attack needed proportionally.
-        Update <code>AttackCalculator.vue</code> when the real formula is known.
-      </p>
-    </div>
   </div>
 </template>
 

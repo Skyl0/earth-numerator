@@ -31,16 +31,6 @@
                 <i class="bi bi-crosshair me-1"></i>Attack Calc
               </router-link>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/resource">
-                <i class="bi bi-boxes me-1"></i>Resources
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/troops">
-                <i class="bi bi-person-arms-up me-1"></i>Troops
-              </router-link>
-            </li>
           </ul>
         </div>
       </div>
