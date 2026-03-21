@@ -9,5 +9,8 @@ export default defineConfig({
   plugins: [vue()],
   define: {
     __GIT_BRANCH__: JSON.stringify(branch)
+  },
+  server: {
+    port: 12345,
   }
 })
