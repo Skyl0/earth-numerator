@@ -13,8 +13,8 @@ Welcome to **Earth Numerator**, the premium offensive calculation toolkit for Ea
 ### Installation
 1. Clone the repository and navigate to the project directory:
 ```bash
-git clone <repository-url>
-cd EARTH-TOOLS
+git clone https://github.com/Skyl0/earth-numerator.git
+cd earth-numerator
 ```
 
 2. Install dependencies:
