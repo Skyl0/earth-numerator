@@ -23,7 +23,7 @@
         <div class="card-earth">
           <div class="card-header d-flex justify-content-between align-items-center">
             <span><i class="bi bi-sliders me-2"></i>Input Parameters</span>
-            <div class="import-button-wrapper mt-4">
+            <div class="import-button-wrapper">
               <div class="import-arrow">
                 <i class="bi bi-arrow-right-short"></i>
               </div>
