@@ -14,9 +14,14 @@
         <div class="card-earth">
           <div class="card-header d-flex justify-content-between align-items-center">
             <span><i class="bi bi-sliders me-2"></i>Input Parameters</span>
-            <button class="btn btn-sm btn-outline-teal" style="font-size: 0.75rem; font-weight: 700;" @click="isModalOpen = true">
-              <i class="bi bi-download me-1"></i> IMPORT SPY REPORT
-            </button>
+            <div class="import-button-wrapper mt-4">
+              <div class="import-arrow">
+                <i class="bi bi-arrow-down-short"></i>
+              </div>
+              <button class="btn btn-sm import-btn-premium" style="font-size: 0.75rem; font-weight: 700;" @click="isModalOpen = true">
+                <i class="bi bi-download me-1"></i> IMPORT SPY REPORT
+              </button>
+            </div>
           </div>
           <div class="p-4">
             <!-- Modal for Import -->
@@ -98,6 +103,37 @@
                 </div>
                 <p class="mb-0 mt-2" style="font-size:.8rem; color:var(--earth-muted);">
                   When enabled, the allied defense bonus will be factored into the calculation.
+                </p>
+              </div>
+            </div>
+
+            <!-- Dictatorship -->
+            <div class="mb-4">
+              <label class="form-label">
+                <i class="bi bi-flag-fill me-1 text-earth-red"></i>
+                Government Type
+              </label>
+              <div class="card-earth p-3 mt-1">
+                <div class="form-check form-switch">
+                  <input
+                    id="isDictatorship"
+                    v-model="isDictatorship"
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                  />
+                  <label class="form-check-label" for="isDictatorship">
+                    Target is a Dictatorship
+                    <span v-if="isDictatorship" class="badge ms-2" style="background:var(--earth-red); color:#fff;">
+                      +25% DEF
+                    </span>
+                    <span v-else class="badge ms-2" style="background:var(--earth-border); color:var(--earth-muted);">
+                      Neutral
+                    </span>
+                  </label>
+                </div>
+                <p class="mb-0 mt-2" style="font-size:.8rem; color:var(--earth-muted);">
+                  Dictatorships gain a natural defensive bonus. Auto-detected from spy reports.
                 </p>
               </div>
             </div>
@@ -260,7 +296,13 @@
               <li class="d-flex justify-content-between py-1 border-bottom" style="border-color:var(--earth-border)!important;">
                 <span style="color:var(--earth-muted);">Allied support</span>
                 <strong :class="hasAllies ? 'text-earth-red' : 'text-earth-green'">
-                  {{ hasAllies ? 'Yes' : 'No' }}
+                  {{ hasAllies ? 'Yes (+20%)' : 'No' }}
+                </strong>
+              </li>
+              <li class="d-flex justify-content-between py-1 border-bottom" style="border-color:var(--earth-border)!important;">
+                <span style="color:var(--earth-muted);">Dictatorship</span>
+                <strong :class="isDictatorship ? 'text-earth-red' : 'text-earth-green'">
+                  {{ isDictatorship ? 'Yes (+25%)' : 'No' }}
                 </strong>
               </li>
               <li class="d-flex justify-content-between py-1 border-bottom" style="border-color:var(--earth-border)!important;">
@@ -309,9 +351,9 @@
       <p style="color:var(--earth-muted); font-size:.875rem; margin-bottom:0;">
         The actual formula will be implemented once the game mechanics are confirmed.
         Currently the calculator uses a <em>placeholder</em> calculation:<br/>
-        <code style="color:var(--earth-teal);">Attack = Defense &times; allyFactor &times; (defenderWeaponTech / 100) &divide; (weaponTech / 100) &divide; plannedStrikeMult &divide; (readiness / 100)</code>.
+        <code style="color:var(--earth-teal);">Attack = Defense &times; allyFactor &times; dictFactor &times; (defenderWeaponTech / 100) &divide; (weaponTech / 100) &divide; plannedStrikeMult &divide; (readiness / 100)</code>.
         Both tech values are <strong style="color:var(--earth-teal);">normalised</strong> at 100&nbsp;=&nbsp;baseline. Defender tech above 100 counters your attack;
-        your weapon tech above 100 reduces the troops required. Planned Strike &times;1.5. Readiness below 100% increases the raw attack needed proportionally.
+        your weapon tech above 100 reduces the troops required. Dictatorship adds <strong style="color:var(--earth-red);">25%</strong> defense. Planned Strike &times;1.5. Readiness below 100% increases the raw attack needed proportionally.
         Update <code>AttackCalculator.vue</code> when the real formula is known.
       </p>
     </div>
@@ -328,6 +370,7 @@ const settings = useSettingsStore()
 // Transient per-calculation inputs
 const defenseValue  = ref(0)
 const hasAllies     = ref(false)
+const isDictatorship = ref(false)
 const plannedStrike = ref(false)
 const readiness     = ref(99)
 const result        = ref(0)
@@ -371,6 +414,11 @@ function handleImport() {
     hasAllies.value = expenses > 0
   }
 
+  // 4. Extract Dictatorship
+  // Pattern: The Status of the <strong>Dictatorship</strong>
+  const dictMatch = html.match(/The Status of the <strong>Dictatorship<\/strong>/i)
+  isDictatorship.value = !!dictMatch
+
   // Success: reset modal
   importText.value = ''
   isModalOpen.value = false
@@ -386,13 +434,14 @@ function doActualCalculation() {
 
   // ── Placeholder formula – replace with real game logic ──
   const allyFactor   = hasAllies.value ? 1.2 : 1.0
+  const dictFactor   = isDictatorship.value ? 1.25 : 1.0
   const atkTechMult  = (settings.weaponTech || 100) / 100
   const defTechMult  = (settings.defenderWeaponTech || 100) / 100
   const strikeMult   = plannedStrike.value ? 1.5 : 1.0
   const readyMult    = (readiness.value || 99) / 100
 
   result.value      = Math.round(
-    (defenseValue.value * allyFactor * defTechMult) / atkTechMult / strikeMult / readyMult
+    (defenseValue.value * allyFactor * dictFactor * defTechMult) / atkTechMult / strikeMult / readyMult
   )
   resultReady.value = true
 }
@@ -415,6 +464,7 @@ watch(
   [
     defenseValue, 
     hasAllies, 
+    isDictatorship,
     plannedStrike, 
     readiness, 
     () => settings.weaponTech, 
@@ -433,6 +483,7 @@ onMounted(() => {
 function reset() {
   defenseValue.value  = 0
   hasAllies.value     = false
+  isDictatorship.value = false
   plannedStrike.value = false
   readiness.value     = 99
   result.value        = 0

@@ -7,7 +7,7 @@ Welcome to **Earth Numerator**, the premium offensive calculation toolkit for Ea
 ## 🚀 Getting Started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (v16+)
+- [Node.js](https://nodejs.org/) (v22+)
 - `npm` or `yarn`
 
 ### Installation
