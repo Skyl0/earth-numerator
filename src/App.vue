@@ -7,8 +7,9 @@ const isDevBranch = typeof __GIT_BRANCH__ !== 'undefined' && __GIT_BRANCH__ === 
     <!-- ===== Navbar ===== -->
     <nav class="navbar navbar-expand-lg navbar-earth sticky-top">
       <div class="container">
-        <router-link class="navbar-brand" to="/">
-          <i class="bi bi-globe-americas me-2"></i>Earth Numerator
+        <router-link class="navbar-brand d-flex align-items-center" to="/">
+          <img src="/earth.png" alt="Logo" style="width: 28px; height: 28px; object-fit: contain; mix-blend-mode: screen; border-radius: 50%;" class="me-2"> 
+          Earth Numerator
         </router-link>
 
         <button
