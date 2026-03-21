@@ -1,3 +1,7 @@
+<script setup>
+const isDevBranch = typeof __GIT_BRANCH__ !== 'undefined' && __GIT_BRANCH__ === 'dev'
+</script>
+
 <template>
   <div>
     <!-- ===== Navbar ===== -->
@@ -49,10 +53,29 @@
     <footer>
       Earth Numerator &mdash; Utility toolkit for the browser game <em>Earth</em>
     </footer>
+    <!-- ===== Dev Branch Banner ===== -->
+    <div v-if="isDevBranch" class="dev-banner">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i><strong>DEV BRANCH ACTIVE</strong> &mdash; Features and data may be unstable.
+    </div>
   </div>
 </template>
 
 <style scoped>
+.dev-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--earth-amber);
+  color: #0d1117;
+  text-align: center;
+  padding: 0.5rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  z-index: 9999;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.3);
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity .2s ease;
