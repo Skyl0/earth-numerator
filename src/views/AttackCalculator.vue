@@ -159,6 +159,7 @@
                   min="100"
                   max="300"
                   step="0.1"
+                  @blur="validateWeaponTech('weaponTech')"
                 />
                 <span class="input-group-text">%</span>
               </div>
@@ -180,6 +181,7 @@
                   min="100"
                   max="300"
                   step="0.1"
+                  @blur="validateWeaponTech('defenderWeaponTech')"
                 />
                 <span class="input-group-text">%</span>
               </div>
@@ -394,7 +396,7 @@
           </div>
           <div class="p-4">
             <div class="result-box" :class="{ 'planned-active': plannedStrike }">
-              <div class="result-label">Required Jets or compared to break</div>
+              <div class="result-label">Required Jets to break</div>
               <div
                 :class="['result-value', !resultReady ? 'pending' : '']"
                 id="attack-result"
@@ -411,16 +413,51 @@
             </div>
             
             <!-- Max Ghost Acres Result -->
-            <div v-if="ghostAcresEnabled && (ownBuilt > 0 || targetBuilt > 0)" class="mt-4 pt-4 border-top" style="border-color:var(--earth-border)!important;">
-              <h6 class="mb-3" style="color:var(--earth-pink);"><i class="bi bi-geo-alt-fill me-2"></i>Ghost Acres</h6>
-              <div class="d-flex justify-content-between align-items-center">
-                <span style="color:var(--earth-muted); font-size: 0.9rem;">Calculated units for maximum gain:</span>
-                <strong class="text-earth-teal" style="font-size: 1rem;">
-                  {{ (ownBuilt > 0 && targetBuilt > 0) ? Math.floor((ownBuilt / 20) * targetBuilt * 0.032).toLocaleString() : '0' }}
-                </strong>
+            <div v-if="ghostAcresEnabled && ghostUnitsNeeded > 0" class="mt-4 pt-4 border-top" style="border-color:var(--earth-border)!important;">
+              <h6 class="mb-3" style="color:var(--earth-pink);"><i class="bi bi-geo-alt-fill me-2"></i>Ghost Acres Optimization</h6>
+              
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span style="color:var(--earth-muted); font-size: 0.9rem;">Units needed to max out ghost acres:</span>
+                <strong class="text-earth-pink" style="font-size: 1rem;">{{ ghostUnitsNeeded.toLocaleString() }}</strong>
               </div>
-              <div class="mt-1 text-end" style="font-size: 0.75rem; color: var(--earth-muted);">
-                <em>* Note: these are troops, not turrets (half of jet power).</em>
+
+              <div v-if="ghostRecommendation" class="mb-3">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <span style="font-size: 0.75rem; color: var(--earth-muted); text-transform: uppercase; font-weight: 700;">Ratio:</span>
+                  <div class="btn-group btn-group-sm ratio-selector">
+                    <button class="btn btn-outline-secondary" :class="{ active: ghostRatioMode === 'cheapest' }" @click="ghostRatioMode = 'cheapest'">Cheapest</button>
+                    <button class="btn btn-outline-secondary" :class="{ active: ghostRatioMode === '50/50' }" @click="ghostRatioMode = '50/50'">50/50</button>
+                    <button class="btn btn-outline-secondary" :class="{ active: ghostRatioMode === '66/33' }" @click="ghostRatioMode = '66/33'">66/33</button>
+                    <button class="btn btn-outline-secondary" :class="{ active: ghostRatioMode === '75/25' }" @click="ghostRatioMode = '75/25'">75/25</button>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="ghostRecommendation" class="card-earth p-3 bg-opacity-10" style="background: rgba(217, 70, 239, 0.05);">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span style="color:var(--earth-muted); font-size: 0.85rem;">Recommended Mix:</span>
+                  <span v-if="ghostRatioMode !== 'cheapest' || ghostRecommendation.isMixed" class="badge bg-info text-dark" style="font-size: 0.65rem;">
+                    {{ ghostRatioMode === 'cheapest' ? 'OPTIMIZED' : ghostRatioMode }}
+                  </span>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span style="font-size: 0.9rem;"><i class="bi bi-airplane-fill me-1 text-earth-teal"></i>Jets:</span>
+                  <strong class="text-earth-teal">{{ ghostRecommendation.jets.toLocaleString() }}</strong>
+                </div>
+                <div v-if="ghostRecommendation.troops > 0" class="d-flex justify-content-between align-items-center mb-1">
+                  <span style="font-size: 0.9rem;"><i class="bi bi-person-fill me-1 text-earth-amber"></i>Troops:</span>
+                  <strong class="text-earth-amber">{{ ghostRecommendation.troops.toLocaleString() }}</strong>
+                </div>
+                
+                <div class="mt-2 pt-2 border-top border-secondary opacity-50 d-flex justify-content-between" style="font-size: 0.75rem; color: var(--earth-muted);">
+                  <span>Total Units: {{ (ghostRecommendation.jets + ghostRecommendation.troops).toLocaleString() }}</span>
+                  <span>Power: {{ (ghostRecommendation.jets * 2 + ghostRecommendation.troops).toLocaleString() }}</span>
+                </div>
+              </div>
+              
+              <div class="mt-2 text-end" style="font-size: 0.7rem; color: var(--earth-muted);">
+                <em>* Suggests the cheapest mix (Jets=2, Troops=1) to hit both win power and gain limit.</em>
               </div>
             </div>
           </div>
@@ -510,8 +547,59 @@ const result        = ref(0)
 const resultReady   = ref(false)
 
 const ghostAcresEnabled = ref(false)
+const ghostRatioMode = ref('cheapest')
+
 const ownBuilt = computed(() => Math.max(0, settings.ownAcres - settings.ownUnbuilt))
 const targetBuilt = computed(() => Math.max(0, targetAcres.value - targetUnbuilt.value))
+const ghostUnitsNeeded = computed(() => {
+  if (ownBuilt.value > 0 && targetBuilt.value > 0) {
+    return Math.floor((ownBuilt.value / 20) * targetBuilt.value * 0.032)
+  }
+  return 0
+})
+
+const ghostRecommendation = computed(() => {
+  const G = ghostUnitsNeeded.value
+  const R = result.value
+  const P = R * 2
+  
+  if (G <= 0 || R <= 0) return null
+
+  let J = 0
+  let T = 0
+  let isMixed = false
+
+  if (ghostRatioMode.value === 'cheapest') {
+    if (G > R) {
+      J = 2 * R - G
+      T = 2 * G - 2 * R
+      if (J < 0) {
+        J = 0
+        T = G
+      }
+      isMixed = true
+    } else {
+      // If win-jets >= gain-units, no specialized mix is recommended
+      return null
+    }
+  } else {
+    // Fixed Ratio modes
+    let r = 0.5 // Default 50/50
+    if (ghostRatioMode.value === '66/33') r = 0.66
+    if (ghostRatioMode.value === '75/25') r = 0.75
+    
+    // U = total units. J = rU, T = (1-r)U.
+    // Power = 2J + T = 2rU + (1-r)U = U(r + 1).
+    // Satisfy U >= G AND Power >= P.
+    const U = Math.max(G, P / (r + 1))
+    J = r * U
+    T = (1 - r) * U
+    isMixed = true
+  }
+
+  return { jets: Math.ceil(J), troops: Math.ceil(T), isMixed }
+})
+
 const isCalculating = ref(false)
 const isModalOpen   = ref(false)
 const importText    = ref('')
@@ -686,19 +774,14 @@ watch(
   }
 )
 
-// Ensure tech values are rounded to 1 decimal and min 100
-watch(() => settings.weaponTech, (val) => {
-  if (typeof val === 'number') {
-    const rounded = Math.round(Math.max(100, val) * 10) / 10
-    if (rounded !== val) settings.weaponTech = rounded
+function validateWeaponTech(field) {
+  let val = settings[field]
+  if (typeof val !== 'number' || isNaN(val)) {
+    val = 100
   }
-})
-watch(() => settings.defenderWeaponTech, (val) => {
-  if (typeof val === 'number') {
-    const rounded = Math.round(Math.max(100, val) * 10) / 10
-    if (rounded !== val) settings.defenderWeaponTech = rounded
-  }
-})
+  const validated = Math.round(Math.max(100, val) * 10) / 10
+  if (validated !== settings[field]) settings[field] = validated
+}
 
 // Run initial calculation if defense > 0
 onMounted(() => {
@@ -716,6 +799,7 @@ function reset() {
   ghostAcresEnabled.value = false
   targetAcres.value = 0
   targetUnbuilt.value = 0
+  ghostRatioMode.value = 'cheapest'
   result.value        = 0
   resultReady.value   = false
   importText.value    = ''

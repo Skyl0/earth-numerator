@@ -46,14 +46,14 @@ body {
 }
 
 .navbar-earth .navbar-brand.is-prod {
-  background: linear-gradient(90deg, #ff00ea, #a020f0);
+  background: linear-gradient(90deg, #00d2ff, #3a7bd5);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .live-chip {
-  background: linear-gradient(135deg, #ff00ea, #a020f0);
+  background: linear-gradient(135deg, #00d2ff, #3a7bd5);
   color: white !important;
   font-size: 0.65rem;
   font-weight: 800;
@@ -62,7 +62,7 @@ body {
   margin-left: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  box-shadow: 0 0 12px rgba(255, 0, 234, 0.3);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
   -webkit-text-fill-color: white !important;
   display: inline-block;
   line-height: 1;
@@ -164,6 +164,28 @@ body {
   color: var(--earth-muted);
   letter-spacing: .04em;
   text-transform: uppercase;
+}
+
+.ratio-selector .btn {
+  background: var(--earth-surface);
+  border-color: var(--earth-border);
+  color: var(--earth-muted);
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.ratio-selector .btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--bs-body-color);
+}
+
+.ratio-selector .btn.active {
+  background: var(--earth-blue) !important;
+  border-color: var(--earth-blue) !important;
+  color: #0d1117 !important;
+  box-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
 }
 
 .form-check-input {
