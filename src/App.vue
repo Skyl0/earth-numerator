@@ -1,5 +1,8 @@
 <script setup>
 const isDevBranch = typeof __GIT_BRANCH__ !== 'undefined' && __GIT_BRANCH__ === 'dev'
+const isProd = import.meta.env.PROD
+const appVersion = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.0'
+const buildDate = typeof __APP_BUILD_DATE__ !== 'undefined' ? __APP_BUILD_DATE__ : ''
 </script>
 
 <template>
@@ -55,13 +58,26 @@ const isDevBranch = typeof __GIT_BRANCH__ !== 'undefined' && __GIT_BRANCH__ === 
       Earth Numerator &mdash; Utility toolkit for the browser game <em>Earth</em>
     </footer>
     <!-- ===== Dev Branch Banner ===== -->
-    <div v-if="isDevBranch" class="dev-banner">
-      <i class="bi bi-exclamation-triangle-fill me-2"></i><strong>DEV BRANCH ACTIVE</strong> &mdash; Features and data may be unstable.
+
+    <!-- ===== Version Indicator ===== -->
+    <div v-if="isProd" class="version-indicator">
+      {{ appVersion }}_{{ buildDate }}
     </div>
   </div>
 </template>
 
 <style scoped>
+.version-indicator {
+  position: fixed;
+  bottom: 6px;
+  right: 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+  z-index: 9999;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.8);
+}
 .dev-banner {
   position: fixed;
   bottom: 0;
