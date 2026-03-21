@@ -2,7 +2,9 @@
   <div class="container">
     <!-- Hero -->
     <div class="planet-hero">
-      <div class="planet-icon">🌍</div>
+      <div class="planet-icon">
+        <img src="/earth.png" alt="Earth Numerator Logo" style="width: 100px; height: 100px; object-fit: contain; mix-blend-mode: screen; border-radius: 50%;">
+      </div>
       <h1 class="page-title mt-3">Earth Numerator</h1>
       <p class="page-subtitle mx-auto" style="max-width:520px;">
         Your all-in-one calculation toolkit for the browser game <strong>Earth</strong>.
