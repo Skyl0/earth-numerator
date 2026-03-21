@@ -45,6 +45,30 @@ body {
   background-clip: text;
 }
 
+.navbar-earth .navbar-brand.is-prod {
+  background: linear-gradient(90deg, #ff00ea, #a020f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.live-chip {
+  background: linear-gradient(135deg, #ff00ea, #a020f0);
+  color: white !important;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  margin-left: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 12px rgba(255, 0, 234, 0.3);
+  -webkit-text-fill-color: white !important;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+}
+
 .navbar-earth .nav-link {
   color: var(--earth-muted) !important;
   font-weight: 600;
@@ -257,7 +281,6 @@ body {
 
 .planet-icon {
   font-size: 5rem;
-  filter: drop-shadow(0 0 24px rgba(63, 185, 80, .5));
   animation: float 4s ease-in-out infinite;
 }
 

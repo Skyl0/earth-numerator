@@ -50,5 +50,12 @@ export const useSettingsStore = defineStore('settings', () => {
         { deep: true }
     )
 
-    return { weaponTech, defenderWeaponTech, ownAcres, ownUnbuilt }
+    function reset() {
+        weaponTech.value = 100
+        defenderWeaponTech.value = 100
+        ownAcres.value = 0
+        ownUnbuilt.value = 0
+    }
+
+    return { weaponTech, defenderWeaponTech, ownAcres, ownUnbuilt, reset }
 })

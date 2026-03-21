@@ -10,9 +10,10 @@ const buildDate = typeof __APP_BUILD_DATE__ !== 'undefined' ? __APP_BUILD_DATE__
     <!-- ===== Navbar ===== -->
     <nav class="navbar navbar-expand-lg navbar-earth sticky-top">
       <div class="container">
-        <router-link class="navbar-brand d-flex align-items-center" to="/">
+        <router-link class="navbar-brand d-flex align-items-center" :class="{ 'is-prod': isProdMode }" to="/">
           <img src="/earth.png" alt="Logo" style="width: 28px; height: 28px; object-fit: contain; mix-blend-mode: screen; border-radius: 50%;" class="me-2"> 
           Earth Numerator
+          <span v-if="isProdMode" class="live-chip">LIVE</span>
         </router-link>
 
         <button

@@ -503,7 +503,7 @@ const hasAllies     = ref(false)
 const alliedBonusValue = ref(20)
 const isDictatorship = ref(false)
 const plannedStrike = ref(false)
-const readiness     = ref(99)
+const readiness     = ref(100)
 const targetAcres = ref(0)
 const targetUnbuilt = ref(0)
 const result        = ref(0)
@@ -637,7 +637,7 @@ function doActualCalculation() {
   const atkTechMult  = (settings.weaponTech || 100) / 100
   const defTechMult  = (settings.defenderWeaponTech || 100) / 100
   const strikeMult   = plannedStrike.value ? 1.5 : 1.0
-  const readyMult    = (readiness.value || 99) / 100
+  const readyMult    = (readiness.value || 100) / 100
 
   let calcResult = Math.round(
     (defenseValue.value * allyFactor * dictFactor * defTechMult) / atkTechMult / strikeMult / readyMult
@@ -706,17 +706,19 @@ onMounted(() => {
 })
 
 function reset() {
+  settings.reset()
   defenseValue.value  = 0
   hasAllies.value     = false
   alliedBonusValue.value = 20
   isDictatorship.value = false
   plannedStrike.value = false
-  readiness.value     = 99
+  readiness.value     = 100
   ghostAcresEnabled.value = false
   targetAcres.value = 0
   targetUnbuilt.value = 0
   result.value        = 0
   resultReady.value   = false
-  // weaponTech, defenderWeaponTech, ownAcres, ownUnbuilt logs are persistent
+  importText.value    = ''
+  advisorImportText.value = ''
 }
 </script>
