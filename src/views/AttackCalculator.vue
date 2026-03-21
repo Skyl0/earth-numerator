@@ -741,15 +741,8 @@ function doActualCalculation() {
 
 function calculate() {
   isCalculating.value = true
-  
-  // Clear any existing timeout
-  if (calcTimeout) clearTimeout(calcTimeout)
-  
-  // Enforce minimum spinner time of 250ms for visual feedback
-  calcTimeout = setTimeout(() => {
-    doActualCalculation()
-    isCalculating.value = false
-  }, 250)
+  doActualCalculation()
+  isCalculating.value = false
 }
 
 // Watch all inputs for changes
