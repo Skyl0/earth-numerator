@@ -25,7 +25,7 @@
             <span><i class="bi bi-sliders me-2"></i>Input Parameters</span>
             <div class="import-button-wrapper mt-4">
               <div class="import-arrow">
-                <i class="bi bi-arrow-down-short"></i>
+                <i class="bi bi-arrow-right-short"></i>
               </div>
               <button class="btn btn-sm import-btn-premium" style="font-size: 0.75rem; font-weight: 700;" @click="isModalOpen = true">
                 <i class="bi bi-download me-1"></i> IMPORT SPY REPORT
@@ -111,58 +111,6 @@
               </div>
             </div>
 
-            <!-- Has Allies -->
-            <div class="mb-4">
-              <label class="form-label" style="color: var(--earth-blue);">
-                <i class="bi bi-people-fill me-1"></i>
-                Alliance Support
-              </label>
-              <div class="card-earth p-3 mt-1 allied-support-card" :class="{ 'allied-active': hasAllies }">
-                <div class="form-check form-switch w-100 mb-0">
-                  <input
-                    id="hasAllies"
-                    v-model="hasAllies"
-                    class="form-check-input"
-                    type="checkbox"
-                    role="switch"
-                  />
-                  <label class="form-check-label" for="hasAllies">
-                    Target has allied support
-                    <span v-if="hasAllies" class="badge ms-2" style="background:var(--earth-blue); color:#fff;">
-                      +{{ alliedBonusValue }}% DEF
-                    </span>
-                    <span v-else class="badge ms-2" style="background:var(--earth-border); color:var(--earth-muted);">
-                      None
-                    </span>
-                  </label>
-                </div>
-                
-                <div v-show="hasAllies" class="mt-3 pt-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
-                  <div class="alert alert-warning py-2 px-3 mb-3 d-flex align-items-center" style="font-size: 0.8rem; background-color: rgba(210, 153, 34, 0.1); border-color: rgba(210, 153, 34, 0.3); color: var(--earth-amber);">
-                    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
-                    <div>
-                      <strong>Experimental Feature:</strong> This simply multiplies the target's defense by your selected bonus percentage.
-                    </div>
-                  </div>
-                  <label for="alliedBonusValue" class="form-label mb-1" style="font-size: 0.85rem; color: var(--earth-blue);">Custom Bonus (%)</label>
-                  <div class="input-group input-group-sm" style="width: 120px;">
-                    <input
-                      id="alliedBonusValue"
-                      v-model.number="alliedBonusValue"
-                      type="number"
-                      class="form-control"
-                      min="0"
-                      step="1"
-                    />
-                    <span class="input-group-text">%</span>
-                  </div>
-                </div>
-
-                <p v-show="!hasAllies" class="mb-0 mt-2" style="font-size:.8rem; color:var(--earth-muted);">
-                  When enabled, an allied defense bonus will be factored into the calculation.
-                </p>
-              </div>
-            </div>
 
             <!-- Dictatorship -->
             <div class="mb-4">
@@ -208,15 +156,11 @@
                   type="number"
                   class="form-control"
                   placeholder="100"
-                  min="0"
+                  min="100"
                   max="300"
-                  step="0.01"
+                  step="0.1"
                 />
                 <span class="input-group-text">%</span>
-              </div>
-              <div class="form-text" style="color:var(--earth-muted);">
-                Normalised scale: <strong style="color:var(--earth-teal);">100</strong> = baseline.
-                Higher values (e.g. 150) reduce the raw attack needed; lower values increase it.
               </div>
             </div>
 
@@ -233,15 +177,11 @@
                   type="number"
                   class="form-control"
                   placeholder="100"
-                  min="0"
+                  min="100"
                   max="300"
-                  step="0.01"
+                  step="0.1"
                 />
                 <span class="input-group-text">%</span>
-              </div>
-              <div class="form-text" style="color:var(--earth-muted);">
-                Normalised scale: <strong style="color:var(--earth-red);">100</strong> = baseline.
-                Higher defender tech counters your attack; lower defender tech gives you an edge.
               </div>
             </div>
 
@@ -299,6 +239,59 @@
               <div class="form-text" style="color:var(--earth-muted);">
                 At <strong style="color:var(--earth-green);">100%</strong> your troops fight at full strength.
                 Lower readiness means you need proportionally more raw attack to compensate.
+              </div>
+            </div>
+
+            <!-- Has Allies -->
+            <div class="mb-4">
+              <label class="form-label" style="color: var(--earth-blue);">
+                <i class="bi bi-people-fill me-1"></i>
+                Alliance Support
+              </label>
+              <div class="card-earth p-3 mt-1 allied-support-card" :class="{ 'allied-active': hasAllies }">
+                <div class="form-check form-switch w-100 mb-0">
+                  <input
+                    id="hasAllies"
+                    v-model="hasAllies"
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                  />
+                  <label class="form-check-label" for="hasAllies">
+                    Target has allied support
+                    <span v-if="hasAllies" class="badge ms-2" style="background:var(--earth-blue); color:#fff;">
+                      +{{ alliedBonusValue }}% DEF
+                    </span>
+                    <span v-else class="badge ms-2" style="background:var(--earth-border); color:var(--earth-muted);">
+                      None
+                    </span>
+                  </label>
+                </div>
+                
+                <div v-show="hasAllies" class="mt-3 pt-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
+                  <div class="alert alert-warning py-2 px-3 mb-3 d-flex align-items-center" style="font-size: 0.8rem; background-color: rgba(210, 153, 34, 0.1); border-color: rgba(210, 153, 34, 0.3); color: var(--earth-amber);">
+                    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                    <div>
+                      <strong>Experimental Feature:</strong> This simply multiplies the target's defense by your selected bonus percentage.
+                    </div>
+                  </div>
+                  <label for="alliedBonusValue" class="form-label mb-1" style="font-size: 0.85rem; color: var(--earth-blue);">Custom Bonus (%)</label>
+                  <div class="input-group input-group-sm" style="width: 120px;">
+                    <input
+                      id="alliedBonusValue"
+                      v-model.number="alliedBonusValue"
+                      type="number"
+                      class="form-control"
+                      min="0"
+                      step="1"
+                    />
+                    <span class="input-group-text">%</span>
+                  </div>
+                </div>
+
+                <p v-show="!hasAllies" class="mb-0 mt-2" style="font-size:.8rem; color:var(--earth-muted);">
+                  When enabled, an allied defense bonus will be factored into the calculation.
+                </p>
               </div>
             </div>
 
@@ -400,13 +393,20 @@
             <span v-else-if="resultReady" class="badge rounded-pill bg-success" style="font-size: 0.65rem;">Updated</span>
           </div>
           <div class="p-4">
-            <div class="result-box">
+            <div class="result-box" :class="{ 'planned-active': plannedStrike }">
               <div class="result-label">Required Jets or compared to break</div>
               <div
                 :class="['result-value', !resultReady ? 'pending' : '']"
                 id="attack-result"
               >
                 {{ resultReady ? result.toLocaleString() : '— — —' }}
+              </div>
+            </div>
+            
+            <div v-if="plannedStrike" class="mt-3 alert alert-info py-2 px-3 d-flex align-items-center" style="font-size: 0.85rem; background-color: rgba(57, 215, 184, 0.1); border-color: rgba(57, 215, 184, 0.3); color: var(--earth-teal);">
+              <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+              <div>
+                <strong>Don't forget!</strong> Make sure to switch to <strong>Planned Strike</strong> while attacking.
               </div>
             </div>
             
@@ -639,9 +639,15 @@ function doActualCalculation() {
   const strikeMult   = plannedStrike.value ? 1.5 : 1.0
   const readyMult    = (readiness.value || 99) / 100
 
-  result.value      = Math.round(
+  let calcResult = Math.round(
     (defenseValue.value * allyFactor * dictFactor * defTechMult) / atkTechMult / strikeMult / readyMult
   )
+
+  if (!plannedStrike.value) {
+    calcResult += 1
+  }
+
+  result.value = calcResult
   resultReady.value = true
 }
 
@@ -679,6 +685,20 @@ watch(
     calculate()
   }
 )
+
+// Ensure tech values are rounded to 1 decimal and min 100
+watch(() => settings.weaponTech, (val) => {
+  if (typeof val === 'number') {
+    const rounded = Math.round(Math.max(100, val) * 10) / 10
+    if (rounded !== val) settings.weaponTech = rounded
+  }
+})
+watch(() => settings.defenderWeaponTech, (val) => {
+  if (typeof val === 'number') {
+    const rounded = Math.round(Math.max(100, val) * 10) / 10
+    if (rounded !== val) settings.defenderWeaponTech = rounded
+  }
+})
 
 // Run initial calculation if defense > 0
 onMounted(() => {

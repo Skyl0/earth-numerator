@@ -192,6 +192,12 @@ body {
   border-radius: 12px;
   padding: 1.5rem 2rem;
   text-align: center;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.result-box.planned-active {
+  background: linear-gradient(135deg, rgba(57, 215, 184, .12), rgba(57, 215, 184, .08));
+  border-color: rgba(57, 215, 184, .35);
 }
 
 .result-label {
@@ -209,6 +215,11 @@ body {
   font-weight: 700;
   color: var(--earth-green);
   line-height: 1;
+  transition: color 0.3s;
+}
+
+.result-box.planned-active .result-value {
+  color: var(--earth-teal);
 }
 
 .result-value.pending {
@@ -272,27 +283,30 @@ body {
 
 .import-arrow {
   position: absolute;
-  top: -32px;
-  font-size: 1.5rem;
+  left: -55px;
+  top: -11px;
+  font-size: 3rem;
+  line-height: 1;
+  pointer-events: none;
   color: var(--earth-teal);
-  animation: arrow-bounce 5s infinite;
+  animation: arrow-bounce-right 5s infinite;
   text-shadow: 0 0 12px var(--earth-teal);
 }
 
-@keyframes arrow-bounce {
+@keyframes arrow-bounce-right {
 
   0%,
   15%,
   30%,
   100% {
-    transform: translateY(0);
-    opacity: 0.7;
+    transform: translateX(0);
+    opacity: 0.3;
   }
 
   7%,
   22% {
-    transform: translateY(-8px);
-    opacity: 1;
+    transform: translateX(8px);
+    opacity: 0.6;
   }
 }
 
