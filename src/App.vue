@@ -1,12 +1,55 @@
 <script setup>
+import { ref, onMounted } from 'vue'
+
 const isDevBranch = typeof __GIT_BRANCH__ !== 'undefined' && __GIT_BRANCH__ === 'dev'
 const isProd = import.meta.env.PROD
+const isProdMode = import.meta.env.VITE_PROD === '1'
 const appVersion = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.0'
 const buildDate = typeof __APP_BUILD_DATE__ !== 'undefined' ? __APP_BUILD_DATE__ : ''
+
+const dynamicStars = ref([])
+
+onMounted(() => {
+  const count = 400
+  for (let i = 0; i < count; i++) {
+    dynamicStars.value.push({
+      size: Math.random() * 2 + 1,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: Math.random() * 60 + 40,
+      delay: Math.random() * 20
+    })
+  }
+})
 </script>
 
 <template>
   <div>
+    <!-- Starfield Background -->
+    <div class="starfield">
+      <div class="star-twinkle">
+        <div class="stars-layer stars-small"></div>
+        <div class="stars-layer stars-medium"></div>
+        
+        <!-- Dynamic JS-style stars -->
+        <div 
+          v-for="(star, index) in dynamicStars" 
+          :key="index"
+          class="star"
+          :style="{
+            width: star.size + 'px',
+            height: star.size + 'px',
+            left: star.left + 'vw',
+            top: star.top + 'vh',
+            animationDuration: star.duration + 's',
+            animationDelay: star.delay + 's'
+          }"
+        ></div>
+      </div>
+    </div>
+    
+    <div class="content-wrapper">
+
     <!-- ===== Navbar ===== -->
     <nav class="navbar navbar-expand-lg navbar-earth sticky-top">
       <div class="container">
@@ -63,6 +106,7 @@ const buildDate = typeof __APP_BUILD_DATE__ !== 'undefined' ? __APP_BUILD_DATE__
     <!-- ===== Version Indicator ===== -->
     <div v-if="isProd" class="version-indicator">
       {{ appVersion }}_{{ buildDate }}
+    </div>
     </div>
   </div>
 </template>

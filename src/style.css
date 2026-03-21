@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Press+Start+2P&family=Roboto+Mono:wght@400;500&display=swap');
 
 :root {
-  --earth-dark: #0d1117;
+  --earth-dark: #000000;
   --earth-surface: #161b22;
   --earth-card: #1c2333;
   --earth-border: #30363d;
@@ -98,6 +98,11 @@ body {
 .page-wrapper {
   min-height: calc(100vh - 64px);
   padding: 2.5rem 0 4rem;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
 }
 
 /* ---- Page title ---- */
@@ -281,7 +286,7 @@ body {
 
 .planet-icon {
   font-size: 5rem;
-  animation: float 4s ease-in-out infinite;
+  animation: float 20s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -521,4 +526,106 @@ footer {
 
 .text-muted-earth {
   color: var(--earth-muted) !important;
+}
+
+/* ---- Starfield ---- */
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  background: #000;
+  overflow: hidden;
+}
+
+.stars-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.stars-small {
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: 444px 1968px #FFF, 416px 1198px #FFF, 1083px 1827px #FFF, 1133px 1970px #FFF, 1930px 135px #FFF, 1060px 480px #FFF, 135px 235px #FFF, 850px 150px #FFF, 400px 900px #FFF, 1200px 300px #FFF, 1500px 1000px #FFF, 200px 1800px #FFF, 1700px 500px #FFF, 900px 1400px #FFF, 100px 600px #FFF, 1800px 1200px #FFF, 500px 200px #FFF, 1400px 1600px #FFF, 300px 400px #FFF, 1100px 700px #FFF, 1600px 100px #FFF, 800px 1900px #FFF, 450px 1100px #FFF, 1250px 850px #FFF, 50px 1350px #FFF, 1950px 250px #FFF, 650px 1650px #FFF, 1350px 450px #FFF, 750px 50px #FFF, 1550px 1450px #FFF, 250px 750px #FFF, 1850px 1750px #FFF, 350px 1250px #FFF, 1150px 150px #FFF, 950px 1850px #FFF, 550px 550px #FFF, 1450px 350px #FFF, 150px 1050px #FFF, 1750px 800px #FFF, 1050px 1200px #FFF, 850px 600px #FFF, 1650px 1950px #FFF, 300px 1500px #FFF, 1200px 50px #FFF, 600px 1100px #FFF, 1900px 1400px #FFF, 400px 300px #FFF, 1300px 1700px #FFF, 800px 900px #FFF, 1700px 200px #FFF;
+  /* More stars added via multiple shadows */
+  animation: stars-move-vertical 3000s linear infinite;
+}
+
+.stars-small::after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: 444px 1968px #FFF, 416px 1198px #FFF, 1083px 1827px #FFF, 1133px 1970px #FFF, 1930px 135px #FFF, 1060px 480px #FFF;
+}
+
+.stars-medium {
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow: 100px 200px #FFF, 300px 400px #DDD, 500px 600px #EEE, 700px 800px #FFF, 900px 100px #DDD, 200px 800px #FFF, 400px 100px #EEE, 600px 300px #FFF, 800px 500px #DDD, 1000px 700px #EEE, 1200px 900px #FFF, 1400px 200px #DDD, 1600px 400px #EEE, 1800px 600px #FFF, 2000px 800px #DDD;
+  animation: stars-move-vertical 2000s linear infinite;
+  opacity: 0.6;
+}
+
+.stars-medium::after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow: 100px 200px #FFF, 300px 400px #DDD, 500px 600px #EEE;
+}
+
+@keyframes stars-move-vertical {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-2000px);
+  }
+}
+
+/* Subtle twinkle animation */
+.star-twinkle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  animation: twinkle 40s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: twinkle 60s infinite ease-in-out;
 }
