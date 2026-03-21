@@ -14,6 +14,7 @@
   --earth-amber: #d29922;
   --earth-red: #f85149;
   --earth-blue: #58a6ff;
+  --earth-pink: #d946ef;
   --earth-muted: #8b949e;
   --bs-body-bg: var(--earth-dark);
   --bs-body-color: #e6edf3;
@@ -160,6 +161,28 @@ body {
   border-color: var(--earth-amber) !important;
   box-shadow: 0 0 12px rgba(210, 153, 34, .25);
   background: rgba(210, 153, 34, .06) !important;
+}
+
+/* ---- Ghost Acres card ---- */
+.ghost-acres-card {
+  transition: border-color .25s, box-shadow .25s, background .25s;
+}
+
+.ghost-acres-card.ghost-active {
+  border-color: var(--earth-pink) !important;
+  box-shadow: 0 0 12px rgba(217, 70, 239, .25);
+  background: rgba(217, 70, 239, .06) !important;
+}
+
+/* ---- Allied Support card ---- */
+.allied-support-card {
+  transition: border-color .25s, box-shadow .25s, background .25s;
+}
+
+.allied-support-card.allied-active {
+  border-color: var(--earth-blue) !important;
+  box-shadow: 0 0 12px rgba(88, 166, 255, .25);
+  background: rgba(88, 166, 255, .06) !important;
 }
 
 /* ---- Result box ---- */

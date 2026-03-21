@@ -28,9 +28,18 @@ export const useSettingsStore = defineStore('settings', () => {
             (typeof saved.defenderTech === 'number' ? saved.defenderTech : 100)
     )
 
+    // Own land persistence for Ghost calculations
+    const ownAcres = ref(typeof saved.ownAcres === 'number' ? saved.ownAcres : 0)
+    const ownUnbuilt = ref(typeof saved.ownUnbuilt === 'number' ? saved.ownUnbuilt : 0)
+
     // ── Persist to localStorage whenever any setting changes ──
     watch(
-        () => ({ weaponTech: weaponTech.value, defenderWeaponTech: defenderWeaponTech.value }),
+        () => ({ 
+            weaponTech: weaponTech.value, 
+            defenderWeaponTech: defenderWeaponTech.value,
+            ownAcres: ownAcres.value,
+            ownUnbuilt: ownUnbuilt.value
+        }),
         (values) => {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(values))
@@ -41,5 +50,5 @@ export const useSettingsStore = defineStore('settings', () => {
         { deep: true }
     )
 
-    return { weaponTech, defenderWeaponTech }
+    return { weaponTech, defenderWeaponTech, ownAcres, ownUnbuilt }
 })
