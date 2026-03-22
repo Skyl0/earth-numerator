@@ -95,12 +95,6 @@ onMounted(() => {
       </router-view>
     </main>
 
-    <!-- ===== Footer ===== -->
-    <footer>
-      Earth Numerator &mdash; Utility toolkit for the browser game <em>Earth</em>
-    </footer>
-    <!-- ===== Dev Branch Banner ===== -->
-
     <!-- ===== Version Indicator ===== -->
     <div v-if="isProd" class="version-indicator">
       {{ appVersion }}_{{ buildDate }}

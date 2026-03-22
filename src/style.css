@@ -23,6 +23,8 @@
 html,
 body {
   min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
   background-color: var(--earth-dark);
   color: var(--bs-body-color);
   font-family: 'Exo 2', sans-serif;
@@ -96,8 +98,8 @@ body {
 
 /* ---- Page wrapper ---- */
 .page-wrapper {
-  min-height: calc(100vh - 64px);
-  padding: 2.5rem 0 4rem;
+  padding: 1.5rem 0 3rem;
+  /* Removed fixed min-height to allow content to fit exactly on screen */
 }
 
 .content-wrapper {
@@ -515,15 +517,7 @@ body {
   box-shadow: 0 0 0 3px rgba(57, 215, 184, 0.15);
 }
 
-/* ---- Footer ---- */
-footer {
-  background: var(--earth-surface);
-  border-top: 1px solid var(--earth-border);
-  color: var(--earth-muted);
-  font-size: .8rem;
-  text-align: center;
-  padding: 1rem;
-}
+
 
 /* ---- Utility ---- */
 .text-earth-green {

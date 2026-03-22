@@ -6,11 +6,11 @@
         <h1 class="page-title mb-2">
           <i class="bi bi-crosshair2 me-2"></i>Attack Value Calculator
         </h1>
-        <p class="page-subtitle mb-0">
-          Earth Numerator &mdash; Determine the attack power needed to overcome a target's defenses.
-        </p>
       </div>
-      <div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-sm btn-outline-secondary px-3 py-2" style="font-size: 0.8rem; font-weight: 700; border: 1px solid var(--earth-border); color: var(--earth-muted); background: rgba(255,255,255,0.05);" @click="reset">
+          <i class="bi bi-arrow-counterclockwise me-1"></i> RESET
+        </button>
         <button class="btn btn-sm import-btn-premium px-3 py-2" style="font-size: 0.8rem; font-weight: 700; background-color: var(--earth-teal); color: #0d1117; border:none;" @click="isAdvisorModalOpen = true">
           <i class="bi bi-person-badge me-2"></i> IMPORT ADVISOR
         </button>
@@ -373,12 +373,7 @@
               </div>
             </div>
 
-            <!-- Action -->
-            <div class="d-flex gap-3 flex-wrap">
-              <button class="btn btn-outline-secondary" @click="reset" id="btn-reset">
-                <i class="bi bi-arrow-counterclockwise me-2"></i>Reset All Fields
-              </button>
-            </div>
+
           </div>
         </div>
       </div>
