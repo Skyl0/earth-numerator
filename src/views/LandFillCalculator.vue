@@ -232,12 +232,8 @@ function reset() {
 </script>
 
 <style scoped>
-.land-input-row {
-  transition: transform 0.2s ease;
-}
-
 .land-input-row:hover {
-  transform: translateX(5px);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .percentage-badge {
@@ -294,6 +290,5 @@ function reset() {
 
 .result-card-premium:hover {
   background: rgba(255, 255, 255, 0.06);
-  transform: translateY(-2px);
 }
 </style>
