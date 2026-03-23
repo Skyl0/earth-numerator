@@ -41,18 +41,22 @@
       </div>
     </div>
 
-    <!-- Info banner -->
-    <div class="card-earth mt-5 p-4">
-      <div class="row align-items-center g-3">
-        <div class="col-auto">
-          <i class="bi bi-info-circle-fill text-earth-teal" style="font-size:2rem;"></i>
-        </div>
-        <div class="col">
-          <p class="mb-0" style="color:var(--earth-muted); font-size:.9rem;">
-            All formulas are community-sourced and may be updated as the game evolves.
-            Results are for reference only — always verify in-game before committing resources.
-          </p>
-        </div>
+    <!-- GitHub CTA -->
+    <div class="card-earth mt-5 p-4 text-center mx-auto" style="max-width: 550px;">
+      <div class="mb-3">
+        <i class="bi bi-github text-white" style="font-size: 2.5rem; opacity: 0.8;"></i>
+      </div>
+      <h2 class="mb-2" style="color: white; font-weight: 800; letter-spacing: 0.02em;">GitHub Repository</h2>
+      <p class="mx-auto mb-4" style="color: var(--earth-muted); max-width: 500px; font-size: 0.95rem; line-height: 1.5;">
+        View the source code, report issues, or contribute to Earth Numerator on GitHub.
+      </p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="https://github.com/Skyl0/earth-numerator" target="_blank" class="btn btn-earth px-4 py-2 d-inline-flex align-items-center">
+          <i class="bi bi-star-fill me-2"></i> Star on GitHub
+        </a>
+        <a href="https://github.com/Skyl0/earth-numerator/issues" target="_blank" class="btn btn-outline-light px-4 py-2 d-inline-flex align-items-center" style="border-radius: 8px; font-weight: 700; border-width: 2px;">
+          <i class="bi bi-bug-fill me-2"></i> Report Issue
+        </a>
       </div>
     </div>
   </div>
