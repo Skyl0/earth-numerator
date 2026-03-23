@@ -26,6 +26,19 @@
           </div>
         </router-link>
       </div>
+
+      <div class="col-sm-6 col-lg-4">
+        <router-link to="/land-fill" class="feature-card">
+          <div class="feature-icon text-earth-teal">
+            <i class="bi bi-pie-chart-fill"></i>
+          </div>
+          <div class="feature-title">Land Distribution</div>
+          <div class="feature-desc">
+            Plan your land distribution using relative numbers or percentages.
+            Automatically calculates the resulting proportions.
+          </div>
+        </router-link>
+      </div>
     </div>
 
     <!-- Info banner -->

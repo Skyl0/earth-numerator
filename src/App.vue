@@ -81,6 +81,11 @@ onMounted(() => {
                 <i class="bi bi-crosshair me-1"></i>Attack Calc
               </router-link>
             </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/land-fill">
+                <i class="bi bi-pie-chart me-1"></i>Land Distribution
+              </router-link>
+            </li>
           </ul>
         </div>
       </div>

@@ -540,6 +540,14 @@ body {
   color: var(--earth-blue) !important;
 }
 
+.text-earth-pink {
+  color: var(--earth-pink) !important;
+}
+
+.text-earth-indigo {
+  color: #6366f1 !important;
+}
+
 .text-muted-earth {
   color: var(--earth-muted) !important;
 }

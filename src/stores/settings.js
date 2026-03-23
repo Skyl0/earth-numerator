@@ -31,6 +31,18 @@ export const useSettingsStore = defineStore('settings', () => {
     // Own land persistence for Ghost calculations
     const ownAcres = ref(typeof saved.ownAcres === 'number' ? saved.ownAcres : 0)
     const ownUnbuilt = ref(typeof saved.ownUnbuilt === 'number' ? saved.ownUnbuilt : 0)
+    const constructionSites = ref(typeof saved.constructionSites === 'number' ? saved.constructionSites : 0)
+
+    // Land Distribution for "Land Fill Calculator"
+    const landDistribution = ref(saved.landDistribution || {
+        enterprise: 0,
+        residence: 0,
+        industrial: 0,
+        military: 0,
+        research: 0,
+        farm: 0,
+        oil: 0
+    })
 
     // ── Persist to localStorage whenever any setting changes ──
     watch(
@@ -38,7 +50,9 @@ export const useSettingsStore = defineStore('settings', () => {
             weaponTech: weaponTech.value, 
             defenderWeaponTech: defenderWeaponTech.value,
             ownAcres: ownAcres.value,
-            ownUnbuilt: ownUnbuilt.value
+            ownUnbuilt: ownUnbuilt.value,
+            constructionSites: constructionSites.value,
+            landDistribution: landDistribution.value
         }),
         (values) => {
             try {
@@ -55,7 +69,17 @@ export const useSettingsStore = defineStore('settings', () => {
         defenderWeaponTech.value = 100
         ownAcres.value = 0
         ownUnbuilt.value = 0
+        constructionSites.value = 0
+        landDistribution.value = {
+            enterprise: 0,
+            residence: 0,
+            industrial: 0,
+            military: 0,
+            research: 0,
+            farm: 0,
+            oil: 0
+        }
     }
 
-    return { weaponTech, defenderWeaponTech, ownAcres, ownUnbuilt, reset }
+    return { weaponTech, defenderWeaponTech, ownAcres, ownUnbuilt, constructionSites, landDistribution, reset }
 })
