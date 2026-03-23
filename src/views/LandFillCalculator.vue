@@ -183,10 +183,10 @@ const settings = store
 const landTypes = [
   { key: 'enterprise', label: 'Enterprise Zones', icon: 'bi-building-fill', color: '#39d7b8', colorClass: 'text-earth-teal' },
   { key: 'residence', label: 'Residences', icon: 'bi-house-fill', color: '#3b82f6', colorClass: 'text-earth-blue' },
-  { key: 'industrial', label: 'Industrial Complexes', icon: 'bi-factory', color: '#fbbf24', colorClass: 'text-earth-amber' },
-  { key: 'military', label: 'Military Bases', icon: 'bi-shield-shaded', color: '#ef4444', colorClass: 'text-earth-red' },
+  { key: 'industrial', label: 'Industrial Complexes', icon: 'bi-building', color: '#fbbf24', colorClass: 'text-earth-amber' },
+  { key: 'military', label: 'Military Bases', icon: 'bi-airplane-fill', color: '#ef4444', colorClass: 'text-earth-red' },
   { key: 'research', label: 'Research Labs', icon: 'bi-flask', color: '#d946ef', colorClass: 'text-earth-pink' },
-  { key: 'farm', label: 'Farms', icon: 'bi-tree-fill', color: '#10b981', colorClass: 'text-earth-green' },
+  { key: 'farm', label: 'Farms', icon: 'bi-flower3', color: '#10b981', colorClass: 'text-earth-green' },
   { key: 'oil', label: 'Oil Rigs', icon: 'bi-droplet-fill', color: '#6366f1', colorClass: 'text-earth-indigo' }
 ]
 
