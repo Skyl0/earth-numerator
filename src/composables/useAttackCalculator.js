@@ -6,9 +6,9 @@ export function useAttackCalculator() {
 
   // Transient per-calculation inputs
   const defenseValue = ref(0)
-  const hasAllies = ref(false)
-  const alliedBonusValue = ref(20)
-  const isDictatorship = ref(false)
+  const hasCustomModifier = ref(false)
+  const customModifierValue = ref(10)
+  const isTargetDictatorship = ref(false)
   const plannedStrike = ref(false)
   const readiness = ref(100)
   const targetAcres = ref(0)
@@ -25,7 +25,11 @@ export function useAttackCalculator() {
   
   const ghostUnitsNeeded = computed(() => {
     if (ownBuilt.value > 0 && targetBuilt.value > 0) {
-      return Math.floor((ownBuilt.value / 20) * targetBuilt.value * 0.032)
+      const atkTechMult = (settings.weaponTech || 100) / 100
+      const atkDictFactor = settings.isAttackerDictatorship ? 1.25 : 1.0
+      // Formula: (Total Ghost Units) / (Attacker Technology * Attacker Dictatorship Bonus)
+      const base = (ownBuilt.value / 20) * targetBuilt.value * 0.032
+      return Math.floor(base / (atkTechMult * atkDictFactor))
     }
     return 0
   })
@@ -83,15 +87,16 @@ export function useAttackCalculator() {
       return
     }
 
-    const allyFactor = hasAllies.value ? (1 + alliedBonusValue.value / 100) : 1.0
-    const dictFactor = isDictatorship.value ? 1.25 : 1.0
+    const modifierFactor = hasCustomModifier.value ? (1 + customModifierValue.value / 100) : 1.0
+    const dictFactor = isTargetDictatorship.value ? 1.25 : 1.0
     const atkTechMult = (settings.weaponTech || 100) / 100
     const defTechMult = (settings.defenderWeaponTech || 100) / 100
+    const atkDictFactor = settings.isAttackerDictatorship ? 1.25 : 1.0
     const strikeMult = plannedStrike.value ? 1.5 : 1.0
     const readyMult = (readiness.value || 100) / 100
 
     let calcResult = Math.round(
-      (defenseValue.value * allyFactor * dictFactor * defTechMult) / atkTechMult / strikeMult / readyMult
+      (defenseValue.value * modifierFactor * dictFactor * defTechMult) / (atkTechMult * atkDictFactor * strikeMult * readyMult)
     )
 
     if (!plannedStrike.value) {
@@ -131,6 +136,11 @@ export function useAttackCalculator() {
     if (techMatch) {
       settings.weaponTech = parseFloat(techMatch[1])
     }
+    
+    const dictMatch = html.match(/The Status of the <strong>Dictatorship<\/strong>/i)
+    if (dictMatch) {
+      settings.isAttackerDictatorship = true
+    }
 
     calculate()
   }
@@ -169,11 +179,11 @@ export function useAttackCalculator() {
     const allianceMatch = html.match(/<td>Alliance\/GDI<\/td>\s*<td class='rt'>\$([\d,]+)<\/td>/i)
     if (allianceMatch) {
       const expenses = parseInt(allianceMatch[1].replace(/,/g, ''))
-      hasAllies.value = expenses > 0
+      hasCustomModifier.value = expenses > 0
     }
 
     const dictMatch = html.match(/The Status of the <strong>Dictatorship<\/strong>/i)
-    isDictatorship.value = !!dictMatch
+    isTargetDictatorship.value = !!dictMatch
 
     const acresMatch = html.match(/<td>(?:(?:Built )?Acres|Land)<\/td>\s*<td class='rt'>([\d,]+)<\/td>/i)
     if (acresMatch) {
@@ -191,9 +201,9 @@ export function useAttackCalculator() {
   function reset() {
     settings.reset()
     defenseValue.value = 0
-    hasAllies.value = false
-    alliedBonusValue.value = 20
-    isDictatorship.value = false
+    hasCustomModifier.value = false
+    customModifierValue.value = 10
+    isTargetDictatorship.value = false
     plannedStrike.value = false
     readiness.value = 100
     ghostAcresEnabled.value = false
@@ -208,9 +218,9 @@ export function useAttackCalculator() {
   watch(
     [
       defenseValue, 
-      hasAllies, 
-      alliedBonusValue,
-      isDictatorship,
+      hasCustomModifier, 
+      customModifierValue,
+      isTargetDictatorship,
       plannedStrike, 
       readiness, 
       ghostAcresEnabled,
@@ -219,7 +229,8 @@ export function useAttackCalculator() {
       targetAcres,
       targetUnbuilt,
       () => settings.weaponTech, 
-      () => settings.defenderWeaponTech
+      () => settings.defenderWeaponTech,
+      () => settings.isAttackerDictatorship
     ],
     () => {
       calculate()
@@ -233,9 +244,9 @@ export function useAttackCalculator() {
   return {
     settings,
     defenseValue,
-    hasAllies,
-    alliedBonusValue,
-    isDictatorship,
+    hasCustomModifier,
+    customModifierValue,
+    isTargetDictatorship,
     plannedStrike,
     readiness,
     targetAcres,

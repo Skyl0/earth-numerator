@@ -112,33 +112,45 @@
             </div>
 
 
-            <!-- Dictatorship -->
+            <!-- Government Type -->
             <div class="mb-4">
               <label class="form-label">
                 <i class="bi bi-flag-fill me-1 text-earth-red"></i>
                 Government Type
               </label>
               <div class="card-earth p-3 mt-1">
-                <div class="form-check form-switch">
+                <div class="form-check form-switch mb-3">
                   <input
-                    id="isDictatorship"
-                    v-model="isDictatorship"
+                    id="isAttackerDictatorship"
+                    v-model="settings.isAttackerDictatorship"
                     class="form-check-input"
                     type="checkbox"
                     role="switch"
                   />
-                  <label class="form-check-label" for="isDictatorship">
-                    Target is a Dictatorship
-                    <span v-if="isDictatorship" class="badge ms-2" style="background:var(--earth-red); color:#fff;">
-                      +25% DEF
+                  <label class="form-check-label" for="isAttackerDictatorship">
+                    Attacker is a Dictatorship
+                    <span v-if="settings.isAttackerDictatorship" class="badge ms-2" style="background:var(--earth-red); color:#fff;">
+                      +25% ATK
                     </span>
-                    <span v-else class="badge ms-2" style="background:var(--earth-border); color:var(--earth-muted);">
-                      Neutral
+                  </label>
+                </div>
+                <div class="form-check form-switch">
+                  <input
+                    id="isTargetDictatorship"
+                    v-model="isTargetDictatorship"
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                  />
+                  <label class="form-check-label" for="isTargetDictatorship">
+                    Target is a Dictatorship
+                    <span v-if="isTargetDictatorship" class="badge ms-2" style="background:var(--earth-red); color:#fff;">
+                      +25% DEF
                     </span>
                   </label>
                 </div>
                 <p class="mb-0 mt-2" style="font-size:.8rem; color:var(--earth-muted);">
-                  Dictatorships gain a natural defensive bonus. Auto-detected from spy reports.
+                  Dictatorships gain a natural defensive bonus. Auto-detected from reports.
                 </p>
               </div>
             </div>
@@ -244,25 +256,25 @@
               </div>
             </div>
 
-            <!-- Has Allies -->
+            <!-- Custom Modifier -->
             <div class="mb-4">
               <label class="form-label" style="color: var(--earth-blue);">
                 <i class="bi bi-people-fill me-1"></i>
-                Alliance Support
+                Custom Modifier
               </label>
-              <div class="card-earth p-3 mt-1 allied-support-card" :class="{ 'allied-active': hasAllies }">
+              <div class="card-earth p-3 mt-1 allied-support-card" :class="{ 'allied-active': hasCustomModifier }">
                 <div class="form-check form-switch w-100 mb-0">
                   <input
-                    id="hasAllies"
-                    v-model="hasAllies"
+                    id="hasCustomModifier"
+                    v-model="hasCustomModifier"
                     class="form-check-input"
                     type="checkbox"
                     role="switch"
                   />
-                  <label class="form-check-label" for="hasAllies">
-                    Target has allied support
-                    <span v-if="hasAllies" class="badge ms-2" style="background:var(--earth-blue); color:#fff;">
-                      +{{ alliedBonusValue }}% DEF
+                  <label class="form-check-label" for="hasCustomModifier">
+                    Apply Custom Modifier
+                    <span v-if="hasCustomModifier" class="badge ms-2" style="background:var(--earth-blue); color:#fff;">
+                      +{{ customModifierValue }}% DEF
                     </span>
                     <span v-else class="badge ms-2" style="background:var(--earth-border); color:var(--earth-muted);">
                       None
@@ -270,18 +282,12 @@
                   </label>
                 </div>
                 
-                <div v-show="hasAllies" class="mt-3 pt-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
-                  <div class="alert alert-warning py-2 px-3 mb-3 d-flex align-items-center" style="font-size: 0.8rem; background-color: rgba(210, 153, 34, 0.1); border-color: rgba(210, 153, 34, 0.3); color: var(--earth-amber);">
-                    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
-                    <div>
-                      <strong>Experimental Feature:</strong> This simply multiplies the target's defense by your selected bonus percentage.
-                    </div>
-                  </div>
-                  <label for="alliedBonusValue" class="form-label mb-1" style="font-size: 0.85rem; color: var(--earth-blue);">Custom Bonus (%)</label>
+                <div v-show="hasCustomModifier" class="mt-3 pt-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
+                  <label for="customModifierValue" class="form-label mb-1" style="font-size: 0.85rem; color: var(--earth-blue);">Custom Bonus (%)</label>
                   <div class="input-group input-group-sm" style="width: 120px;">
                     <input
-                      id="alliedBonusValue"
-                      v-model.number="alliedBonusValue"
+                      id="customModifierValue"
+                      v-model.number="customModifierValue"
                       type="number"
                       class="form-control"
                       min="0"
@@ -291,8 +297,8 @@
                   </div>
                 </div>
 
-                <p v-show="!hasAllies" class="mb-0 mt-2" style="font-size:.8rem; color:var(--earth-muted);">
-                  When enabled, an allied defense bonus will be factored into the calculation.
+                <p v-show="!hasCustomModifier" class="mb-0 mt-2" style="font-size:.8rem; color:var(--earth-muted);">
+                  When enabled, a custom defense bonus will be factored into the calculation.
                 </p>
               </div>
             </div>
@@ -470,15 +476,21 @@
                 <strong>{{ defenseValue.toLocaleString() }}</strong>
               </li>
               <li class="d-flex justify-content-between py-1 border-bottom" style="border-color:var(--earth-border)!important;">
-                <span style="color:var(--earth-muted);">Allied support</span>
-                <strong :class="hasAllies ? 'text-earth-blue' : 'text-earth-green'">
-                  {{ hasAllies ? `Yes (+${alliedBonusValue}%)` : 'No' }}
+                <span style="color:var(--earth-muted);">Custom modifier</span>
+                <strong :class="hasCustomModifier ? 'text-earth-blue' : 'text-earth-green'">
+                  {{ hasCustomModifier ? `Yes (+${customModifierValue}%)` : 'No' }}
                 </strong>
               </li>
               <li class="d-flex justify-content-between py-1 border-bottom" style="border-color:var(--earth-border)!important;">
-                <span style="color:var(--earth-muted);">Dictatorship</span>
-                <strong :class="isDictatorship ? 'text-earth-red' : 'text-earth-green'">
-                  {{ isDictatorship ? 'Yes (+25%)' : 'No' }}
+                <span style="color:var(--earth-muted);">Your government</span>
+                <strong :class="settings.isAttackerDictatorship ? 'text-earth-red' : 'text-earth-green'">
+                  {{ settings.isAttackerDictatorship ? 'Dictatorship (+25% ATK)' : 'Neutral' }}
+                </strong>
+              </li>
+              <li class="d-flex justify-content-between py-1 border-bottom" style="border-color:var(--earth-border)!important;">
+                <span style="color:var(--earth-muted);">Target dictatorship</span>
+                <strong :class="isTargetDictatorship ? 'text-earth-red' : 'text-earth-green'">
+                  {{ isTargetDictatorship ? 'Yes (+25%)' : 'No' }}
                 </strong>
               </li>
               <li class="d-flex justify-content-between py-1 border-bottom" style="border-color:var(--earth-border)!important;">
@@ -529,9 +541,9 @@ import { useAttackCalculator } from '../composables/useAttackCalculator'
 const {
   settings,
   defenseValue,
-  hasAllies,
-  alliedBonusValue,
-  isDictatorship,
+  hasCustomModifier,
+  customModifierValue,
+  isTargetDictatorship,
   plannedStrike,
   readiness,
   targetAcres,
