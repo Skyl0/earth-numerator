@@ -112,7 +112,6 @@
             </div>
 
 
-            <!-- Government Type -->
             <div class="mb-4">
               <label class="form-label">
                 <i class="bi bi-flag-fill me-1 text-earth-red"></i>
@@ -126,11 +125,28 @@
                     class="form-check-input"
                     type="checkbox"
                     role="switch"
+                    @change="onDictatorshipToggle"
                   />
                   <label class="form-check-label" for="isAttackerDictatorship">
                     Attacker is a Dictatorship
                     <span v-if="settings.isAttackerDictatorship" class="badge ms-2" style="background:var(--earth-red); color:#fff;">
                       +25% ATK
+                    </span>
+                  </label>
+                </div>
+                <div class="form-check form-switch mb-3">
+                  <input
+                    id="isAttackerRepublic"
+                    v-model="settings.isAttackerRepublic"
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    @change="onRepublicToggle"
+                  />
+                  <label class="form-check-label" for="isAttackerRepublic">
+                    Attacker is a Republic
+                    <span v-if="settings.isAttackerRepublic" class="badge ms-2" style="background:var(--earth-amber); color:#0d1117;">
+                      −10% ATK · +10% Units
                     </span>
                   </label>
                 </div>
@@ -150,7 +166,7 @@
                   </label>
                 </div>
                 <p class="mb-0 mt-2" style="font-size:.8rem; color:var(--earth-muted);">
-                  Dictatorships gain a natural defensive bonus. Auto-detected from reports.
+                  Dictatorships gain a natural defensive bonus. Republic attackers suffer −10% ATK and need 10% more units. Auto-detected from reports.
                 </p>
               </div>
             </div>
@@ -483,8 +499,10 @@
               </li>
               <li class="d-flex justify-content-between py-1 border-bottom" style="border-color:var(--earth-border)!important;">
                 <span style="color:var(--earth-muted);">Your government</span>
-                <strong :class="settings.isAttackerDictatorship ? 'text-earth-red' : 'text-earth-green'">
-                  {{ settings.isAttackerDictatorship ? 'Dictatorship (+25% ATK)' : 'Neutral' }}
+                <strong
+                  :class="settings.isAttackerDictatorship ? 'text-earth-red' : (settings.isAttackerRepublic ? 'text-earth-amber' : 'text-earth-green')"
+                >
+                  {{ settings.isAttackerDictatorship ? 'Dictatorship (+25% ATK)' : (settings.isAttackerRepublic ? 'Republic (−10% ATK, +10% units)' : 'Neutral') }}
                 </strong>
               </li>
               <li class="d-flex justify-content-between py-1 border-bottom" style="border-color:var(--earth-border)!important;">
@@ -585,6 +603,14 @@ function handleImport() {
   } catch (e) {
     alert(e.message)
   }
+}
+
+function onDictatorshipToggle() {
+  if (settings.isAttackerDictatorship) settings.isAttackerRepublic = false
+}
+
+function onRepublicToggle() {
+  if (settings.isAttackerRepublic) settings.isAttackerDictatorship = false
 }
 
 function reset() {

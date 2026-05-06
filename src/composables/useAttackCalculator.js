@@ -22,14 +22,16 @@ export function useAttackCalculator() {
 
   const ownBuilt = computed(() => Math.max(0, settings.ownAcres - settings.ownUnbuilt))
   const targetBuilt = computed(() => Math.max(0, targetAcres.value - targetUnbuilt.value))
-  
+
   const ghostUnitsNeeded = computed(() => {
     if (ownBuilt.value > 0 && targetBuilt.value > 0) {
       const atkTechMult = (settings.weaponTech || 100) / 100
       const atkDictFactor = settings.isAttackerDictatorship ? 1.25 : 1.0
+      const atkRepublicFactor = settings.isAttackerRepublic ? 0.9 : 1.0
       // Formula: (Total Ghost Units) / (Attacker Technology * Attacker Dictatorship Bonus)
+      // Republic needs 10% MORE units (divide by a smaller number = more units needed)
       const base = (ownBuilt.value / 20) * targetBuilt.value * 0.032
-      return Math.floor(base / (atkTechMult * atkDictFactor))
+      return Math.floor(base / (atkTechMult * atkDictFactor) * atkRepublicFactor)
     }
     return 0
   })
@@ -38,7 +40,7 @@ export function useAttackCalculator() {
     const G = ghostUnitsNeeded.value
     const R = result.value
     const P = R * 2
-    
+
     if (G <= 0 || R <= 0) return null
 
     let J = 0
@@ -61,7 +63,7 @@ export function useAttackCalculator() {
       let r = 0.5
       if (ghostRatioMode.value === '66/33') r = 0.66
       if (ghostRatioMode.value === '75/25') r = 0.75
-      
+
       const U = Math.max(G, P / (r + 1))
       J = r * U
       T = (1 - r) * U
@@ -92,11 +94,12 @@ export function useAttackCalculator() {
     const atkTechMult = (settings.weaponTech || 100) / 100
     const defTechMult = (settings.defenderWeaponTech || 100) / 100
     const atkDictFactor = settings.isAttackerDictatorship ? 1.25 : 1.0
+    const atkRepublicFactor = settings.isAttackerRepublic ? 0.90 : 1.0   // -10% attack malus
     const strikeMult = plannedStrike.value ? 1.5 : 1.0
     const readyMult = (readiness.value || 100) / 100
 
     let calcResult = Math.round(
-      (defenseValue.value * modifierFactor * dictFactor * defTechMult) / (atkTechMult * atkDictFactor * strikeMult * readyMult)
+      (defenseValue.value * modifierFactor * dictFactor * defTechMult) / (atkTechMult * atkDictFactor * atkRepublicFactor * strikeMult * readyMult)
     )
 
     if (!plannedStrike.value) {
@@ -136,10 +139,17 @@ export function useAttackCalculator() {
     if (techMatch) {
       settings.weaponTech = parseFloat(techMatch[1])
     }
-    
+
     const dictMatch = html.match(/The Status of the <strong>Dictatorship<\/strong>/i)
     if (dictMatch) {
       settings.isAttackerDictatorship = true
+      settings.isAttackerRepublic = false
+    }
+
+    const republicMatch = html.match(/The Status of the <strong>Republic<\/strong>/i)
+    if (republicMatch) {
+      settings.isAttackerRepublic = true
+      settings.isAttackerDictatorship = false
     }
 
     calculate()
@@ -166,11 +176,11 @@ export function useAttackCalculator() {
       const troopsMatch = html.match(/<td>Troops<\/td>\s*<td class='rt'>([\d,]+)<\/td>/i)
       const jetsMatch = html.match(/<td>Jets<\/td>\s*<td class='rt'>([\d,]+)<\/td>/i)
       const tanksMatch = html.match(/<td>Tanks<\/td>\s*<td class='rt'>([\d,]+)<\/td>/i)
-      
+
       const troops = troopsMatch ? parseInt(troopsMatch[1].replace(/,/g, '')) : 0
       const jets = jetsMatch ? parseInt(jetsMatch[1].replace(/,/g, '')) : 0
       const tanks = tanksMatch ? parseInt(tanksMatch[1].replace(/,/g, '')) : 0
-      
+
       if (troopsMatch || jetsMatch || tanksMatch) {
         defenseValue.value = (troops + (jets * 2) + (tanks * 4)) / 2
       }
@@ -217,20 +227,21 @@ export function useAttackCalculator() {
   // Watch all inputs for changes
   watch(
     [
-      defenseValue, 
-      hasCustomModifier, 
+      defenseValue,
+      hasCustomModifier,
       customModifierValue,
       isTargetDictatorship,
-      plannedStrike, 
-      readiness, 
+      plannedStrike,
+      readiness,
       ghostAcresEnabled,
       () => settings.ownAcres,
       () => settings.ownUnbuilt,
       targetAcres,
       targetUnbuilt,
-      () => settings.weaponTech, 
+      () => settings.weaponTech,
       () => settings.defenderWeaponTech,
-      () => settings.isAttackerDictatorship
+      () => settings.isAttackerDictatorship,
+      () => settings.isAttackerRepublic
     ],
     () => {
       calculate()

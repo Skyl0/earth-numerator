@@ -33,6 +33,7 @@ export const useSettingsStore = defineStore('settings', () => {
     const ownUnbuilt = ref(typeof saved.ownUnbuilt === 'number' ? saved.ownUnbuilt : 0)
     const constructionSites = ref(typeof saved.constructionSites === 'number' ? saved.constructionSites : 0)
     const isAttackerDictatorship = ref(!!saved.isAttackerDictatorship)
+    const isAttackerRepublic = ref(!!saved.isAttackerRepublic)
 
     // Land Distribution for "Land Fill Calculator"
     const landDistribution = ref(saved.landDistribution || {
@@ -54,6 +55,7 @@ export const useSettingsStore = defineStore('settings', () => {
             ownUnbuilt: ownUnbuilt.value,
             constructionSites: constructionSites.value,
             isAttackerDictatorship: isAttackerDictatorship.value,
+            isAttackerRepublic: isAttackerRepublic.value,
             landDistribution: landDistribution.value
         }),
         (values) => {
@@ -73,6 +75,7 @@ export const useSettingsStore = defineStore('settings', () => {
         ownUnbuilt.value = 0
         constructionSites.value = 0
         isAttackerDictatorship.value = false
+        isAttackerRepublic.value = false
         landDistribution.value = {
             enterprise: 0,
             residence: 0,
@@ -84,5 +87,5 @@ export const useSettingsStore = defineStore('settings', () => {
         }
     }
 
-    return { weaponTech, defenderWeaponTech, ownAcres, ownUnbuilt, constructionSites, isAttackerDictatorship, landDistribution, reset }
+    return { weaponTech, defenderWeaponTech, ownAcres, ownUnbuilt, constructionSites, isAttackerDictatorship, isAttackerRepublic, landDistribution, reset }
 })
